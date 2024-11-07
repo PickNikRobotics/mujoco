@@ -16,6 +16,7 @@
 #include "bowl.h"
 #include "gear.h"
 #include "nut.h"
+#include "point_cloud.h"
 #include "torus.h"
 #include "sdflib.h"
 
@@ -26,6 +27,7 @@ mjPLUGIN_LIB_INIT {
   Bowl::RegisterPlugin();
   Gear::RegisterPlugin();
   Nut::RegisterPlugin();
+  PointCloud::RegisterPlugin();
   Torus::RegisterPlugin();
   SdfLib::RegisterPlugin();
 }

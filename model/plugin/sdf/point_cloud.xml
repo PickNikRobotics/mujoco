@@ -1,0 +1,54 @@
+
+<mujoco>
+  <extension>
+    <plugin plugin="mujoco.sdf.point_cloud">
+      <instance name="point_cloud">
+        <config key="radius" value="0.02"/>
+      </instance>
+    </plugin>
+  </extension>
+
+  <asset>
+    <mesh name="point_cloud">
+      <plugin instance="point_cloud"/>
+    </mesh>
+  </asset>
+
+  <option sdf_iterations="5" sdf_initpoints="20"/>
+
+  <default>
+    <geom solref="0.01 1" solimp=".95 .99 .0001" friction="0.2"/>
+  </default>
+
+  <statistic meansize=".1"/>
+
+  <include file="scene.xml"/>
+
+  <worldbody>
+    <body name="cube" pos="0.7 0.0 0.0">
+      <joint name="trans" type="slide" damping="100" axis="1 0 0"/>
+      <geom name="cube" type="box" size="0.1 0.1 0.1" rgba="0.4 0.0 0.4 1" margin="3.0" gap="3.0"/>
+    </body>
+    <body name="point_cloud" pos="0 0 0">
+      <!--NOTE: Alpha rgba value of 0.0 so the visuals can be produced by the sdf plugin-->
+      <geom type="sdf" name="point_cloud" mesh="point_cloud" rgba="0.0 0.4 0.4 0.0" margin="3.0" gap="3.0">
+        <plugin instance="point_cloud"/>
+      </geom>
+    </body>
+    <light name="left" pos="0 0 1"/>
+    <light name="right" pos="1 0 1"/>
+  </worldbody>
+
+  <actuator>
+    <position name="trans_jnt" joint="trans" ctrlrange="-1.0 1.0" ctrllimited="true" kp="4000" kv="60"/>
+  </actuator>
+
+  <sensor>
+    <distance name="point_cloud_distance_sensor" geom1="cube" geom2="point_cloud" cutoff="10"/>
+  </sensor>
+
+<!--  <contact>-->
+<!--    <exclude name="ground_box" body1="cube" body2="ground"/>-->
+<!--    <exclude name="ground_point_cloud" body1="point_cloud" body2="ground"/>-->
+<!--  </contact>-->
+</mujoco>

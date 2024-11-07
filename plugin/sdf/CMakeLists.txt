@@ -25,6 +25,8 @@ set(MUJOCO_SDF_SRCS
     bowl.h
     gear.cc
     gear.h
+    point_cloud.cc
+    point_cloud.h
     register.cc
     nut.cc
     nut.h

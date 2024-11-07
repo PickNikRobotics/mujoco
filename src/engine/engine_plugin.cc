@@ -457,8 +457,8 @@ void mj_loadAllPluginLibraries(const char* directory,
 
   // go through each entry in the directory
   for (struct dirent* dp; (dp = readdir(dirp));) {
-    // only look at regular files (skip symlinks, pipes, directories, etc.)
-    if (dp->d_type == DT_REG) {
+    // only look at regular files or symlinks (skip pipes, directories, etc.)
+    if (dp->d_type == DT_REG || dp->d_type == DT_LNK) {
       const std::string name(dp->d_name);
       if (name.size() > dso_suffix.size() &&
           name.substr(name.size() - dso_suffix.size()) == dso_suffix) {
