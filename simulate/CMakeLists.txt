@@ -101,7 +101,7 @@ if(NOT TARGET lodepng)
 endif()
 
 # Simulate library
-add_library(platform_ui_adapter OBJECT)
+add_library(platform_ui_adapter STATIC)
 target_sources(
   platform_ui_adapter
   PUBLIC
