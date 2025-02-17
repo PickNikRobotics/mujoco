@@ -104,8 +104,17 @@ endif()
 add_library(platform_ui_adapter OBJECT)
 target_sources(
   platform_ui_adapter
-  PRIVATE glfw_adapter.h glfw_dispatch.h platform_ui_adapter.h
+  PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/glfw_adapter.h>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/glfw_dispatch.h>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/platform_ui_adapter.h>"
+        "$<INSTALL_INTERFACE:include/mujoco/glfw_adapter.h>"
+        "$<INSTALL_INTERFACE:include/mujoco/glfw_dispatch.h>"
+        "$<INSTALL_INTERFACE:include/mujoco/platform_ui_adapter.h>"
   PRIVATE glfw_adapter.cc glfw_dispatch.cc platform_ui_adapter.cc
+)
+set_target_properties(
+    platform_ui_adapter PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/glfw_adapter.h;${CMAKE_CURRENT_SOURCE_DIR}/glfw_dispatch.h;${CMAKE_CURRENT_SOURCE_DIR}/platform_ui_adapter.h"
 )
 target_compile_options(platform_ui_adapter PRIVATE ${MUJOCO_SIMULATE_COMPILE_OPTIONS})
 if(APPLE)
@@ -114,7 +123,7 @@ if(APPLE)
 endif()
 target_include_directories(platform_ui_adapter PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR} $<TARGET_PROPERTY:glfw,INTERFACE_INCLUDE_DIRECTORIES>>"
-         "$<INSTALL_INTERFACE:>")
+         "$<INSTALL_INTERFACE:include/mujoco>")
 
 
 target_link_libraries(platform_ui_adapter PUBLIC mujoco::mujoco)
@@ -132,9 +141,12 @@ target_sources(
   PRIVATE simulate.h
   PRIVATE simulate.cc array_safety.h
 )
+set_target_properties(
+        libsimulate PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/simulate.h"
+)
 target_include_directories(libsimulate PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
-         "$<INSTALL_INTERFACE:>"
+         "$<INSTALL_INTERFACE:include/mujoco>"
 )
 target_compile_options(libsimulate PRIVATE ${MUJOCO_SIMULATE_COMPILE_OPTIONS})
 target_link_libraries(libsimulate PUBLIC lodepng mujoco::platform_ui_adapter mujoco::mujoco)

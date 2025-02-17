@@ -80,7 +80,7 @@ add_library(mujoco SHARED ${MUJOCO_RESOURCE_FILES})
 target_include_directories(
   mujoco
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/>
+         $<INSTALL_INTERFACE:include>
   PRIVATE src
 )
 
