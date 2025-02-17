@@ -104,7 +104,7 @@ endif()
 add_library(platform_ui_adapter OBJECT)
 target_sources(
   platform_ui_adapter
-  PUBLIC glfw_adapter.h glfw_dispatch.h platform_ui_adapter.h
+  PRIVATE glfw_adapter.h glfw_dispatch.h platform_ui_adapter.h
   PRIVATE glfw_adapter.cc glfw_dispatch.cc platform_ui_adapter.cc
 )
 target_compile_options(platform_ui_adapter PRIVATE ${MUJOCO_SIMULATE_COMPILE_OPTIONS})
@@ -112,10 +112,11 @@ if(APPLE)
   target_sources(platform_ui_adapter PUBLIC glfw_corevideo.h PRIVATE glfw_corevideo.mm)
   target_link_libraries(platform_ui_adapter PUBLIC "-framework CoreVideo")
 endif()
-target_include_directories(
-  platform_ui_adapter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-                             $<TARGET_PROPERTY:glfw,INTERFACE_INCLUDE_DIRECTORIES>
-)
+target_include_directories(platform_ui_adapter PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR} $<TARGET_PROPERTY:glfw,INTERFACE_INCLUDE_DIRECTORIES>>"
+         "$<INSTALL_INTERFACE:>")
+
+
 target_link_libraries(platform_ui_adapter PUBLIC mujoco::mujoco)
 if(SIMULATE_GLFW_DYNAMIC_SYMBOLS)
   target_compile_definitions(platform_ui_adapter PUBLIC mjGLFW_DYNAMIC_SYMBOLS)
@@ -128,10 +129,13 @@ add_library(mujoco::libsimulate ALIAS libsimulate)
 
 target_sources(
   libsimulate
-  PUBLIC simulate.h
+  PRIVATE simulate.h
   PRIVATE simulate.cc array_safety.h
 )
-target_include_directories(libsimulate PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(libsimulate PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+         "$<INSTALL_INTERFACE:>"
+)
 target_compile_options(libsimulate PRIVATE ${MUJOCO_SIMULATE_COMPILE_OPTIONS})
 target_link_libraries(libsimulate PUBLIC lodepng mujoco::platform_ui_adapter mujoco::mujoco)
 target_link_options(libsimulate PRIVATE ${MUJOCO_SIMULATE_LINK_OPTIONS})

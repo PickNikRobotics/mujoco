@@ -192,7 +192,7 @@ endif()
 if(NOT (APPLE AND MUJOCO_BUILD_MACOS_FRAMEWORKS))
   # Install the libraries.
   install(
-    TARGETS mujoco
+    TARGETS mujoco libsimulate platform_ui_adapter lodepng
     EXPORT ${PROJECT_NAME}
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT runtime
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT runtime
